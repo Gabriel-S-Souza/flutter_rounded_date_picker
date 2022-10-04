@@ -14,7 +14,11 @@ class FlutterRoundedDatePickerHeader extends StatelessWidget {
       this.imageHeader,
       this.description = "",
       this.fontFamily,
-      this.style})
+      this.style, 
+      this.yearColor, 
+      this.dayColor, 
+      this.headerDecoration
+    })
       : super(key: key);
 
   final DateTime selectedDate;
@@ -38,6 +42,15 @@ class FlutterRoundedDatePickerHeader extends StatelessWidget {
   /// Font
   final String? fontFamily;
 
+  /// Year text color
+  final Color? yearColor;
+
+  /// Day text color
+  final Color? dayColor;
+
+  // Decoration of the header container
+  final BoxDecoration? headerDecoration;
+
   void _handleChangeMode(DatePickerMode value) {
     if (value != mode) onModeChanged(value);
   }
@@ -50,16 +63,27 @@ class FlutterRoundedDatePickerHeader extends StatelessWidget {
     final TextTheme headerTextTheme = themeData.primaryTextTheme;
     Color? dayColor;
     Color? yearColor;
-    switch (themeData.primaryColorBrightness) {
-      case Brightness.light:
-        dayColor = mode == DatePickerMode.day ? Colors.black87 : Colors.black54;
-        yearColor =
-            mode == DatePickerMode.year ? Colors.black87 : Colors.black54;
-        break;
-      case Brightness.dark:
-        dayColor = mode == DatePickerMode.day ? Colors.white : Colors.white70;
-        yearColor = mode == DatePickerMode.year ? Colors.white : Colors.white70;
-        break;
+    
+    if(yearColor == null) {
+      switch (themeData.brightness) {
+        case Brightness.light:
+          yearColor =
+              mode == DatePickerMode.year ? Colors.black87 : Colors.black54;
+          break;
+        case Brightness.dark:
+          yearColor = mode == DatePickerMode.year ? Colors.white : Colors.white70;
+          break;
+      }
+    }
+    if(dayColor == null) {
+      switch (themeData.brightness) {
+        case Brightness.light:
+          dayColor = mode == DatePickerMode.day ? Colors.black87 : Colors.black54;
+          break;
+        case Brightness.dark:
+          dayColor = mode == DatePickerMode.day ? Colors.white : Colors.white70;
+          break;
+      }
     }
 
     if (style?.textStyleDayButton?.color != null) {
@@ -126,6 +150,11 @@ class FlutterRoundedDatePickerHeader extends StatelessWidget {
       ),
     );
 
+    String getFormatedDay() {
+      final String day = localizations.formatMediumDate(selectedDate);
+      return '${day.toUpperCase().substring(0, 1)}${day.toUpperCase().substring(1).toLowerCase()}';
+
+    }
     final Widget dayButton = IgnorePointer(
       ignoring: mode == DatePickerMode.day,
       ignoringSemantics: false,
@@ -138,7 +167,7 @@ class FlutterRoundedDatePickerHeader extends StatelessWidget {
         child: Semantics(
           selected: mode == DatePickerMode.day,
           child: Text(
-            localizations.formatMediumDate(selectedDate),
+            getFormatedDay(),
             textScaleFactor: 1,
             style: dayStyle,
           ),
@@ -187,7 +216,7 @@ class FlutterRoundedDatePickerHeader extends StatelessWidget {
                 ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );

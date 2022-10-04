@@ -3,8 +3,6 @@ import 'package:flutter/semantics.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_rounded_date_picker/flutter_rounded_date_picker.dart';
 import 'package:flutter_rounded_date_picker/src/flutter_rounded_button_action.dart';
-import 'package:flutter_rounded_date_picker/src/material_rounded_date_picker_style.dart';
-import 'package:flutter_rounded_date_picker/src/material_rounded_year_picker_style.dart';
 import 'package:flutter_rounded_date_picker/src/widgets/flutter_rounded_date_picker_header.dart';
 import 'package:flutter_rounded_date_picker/src/widgets/flutter_rounded_day_picker.dart';
 import 'package:flutter_rounded_date_picker/src/widgets/flutter_rounded_month_picker.dart';
@@ -35,7 +33,9 @@ class FlutterRoundedDatePickerDialog extends StatefulWidget {
       this.builderDay,
       this.listDateDisabled,
       this.onTapDay,
-      this.onMonthChange})
+      this.onMonthChange,
+      this.headerDecoration, 
+      this.separator})
       : super(key: key);
 
   final DateTime initialDate;
@@ -81,6 +81,12 @@ class FlutterRoundedDatePickerDialog extends StatefulWidget {
   final OnTapDay? onTapDay;
 
   final Function? onMonthChange;
+
+  // Decoration of the header container
+  final BoxDecoration? headerDecoration;
+
+  /// Separator for the header
+  final Widget? separator;
 
   @override
   _FlutterRoundedDatePickerDialogState createState() =>
@@ -259,6 +265,9 @@ class _FlutterRoundedDatePickerDialogState
             imageHeader: widget.imageHeader,
             description: widget.description,
             fontFamily: widget.fontFamily,
+            dayColor: widget.styleDatePicker?.dayColor,
+            yearColor: widget.styleDatePicker?.yearColor,
+            headerDecoration: widget.headerDecoration,
             style: widget.styleDatePicker);
         switch (orientation) {
           case Orientation.landscape:
@@ -298,6 +307,7 @@ class _FlutterRoundedDatePickerDialogState
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   header,
+                  widget.separator ?? SizedBox(),
                   if (widget.height == null)
                     Flexible(child: picker)
                   else

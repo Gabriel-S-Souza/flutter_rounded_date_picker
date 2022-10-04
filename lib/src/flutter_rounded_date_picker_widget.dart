@@ -118,7 +118,9 @@ Future<DateTime?> showRoundedDatePicker(
     BuilderDayOfDatePicker? builderDay,
     List<DateTime>? listDateDisabled,
     OnTapDay? onTapDay,
-    Function? onMonthChange}) async {
+    Function? onMonthChange,
+    BoxDecoration? headerDecoration,
+    Widget? separator}) async {
   initialDate ??= DateTime.now();
   firstDate ??= DateTime(initialDate.year - 1);
   lastDate ??= DateTime(initialDate.year + 1);
@@ -183,6 +185,8 @@ Future<DateTime?> showRoundedDatePicker(
           listDateDisabled: listDateDisabled,
           onTapDay: onTapDay,
           onMonthChange: onMonthChange,
+          headerDecoration: headerDecoration,
+          separator: separator,
         ),
       ),
     ),
